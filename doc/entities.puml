@@ -1,0 +1,44 @@
+@startuml entities
+
+title Сущности
+
+entity "User" as user {
+  User_ID : integer **PK**
+  Name : text
+  Password : text
+}
+
+entity "Task" as task {
+  Task_ID : integer **PK**
+  Title : text
+  Content : text
+  Status : text
+  Views : integer
+  OwnerId : integer **FK**
+}
+
+entity "Comment" as comment {
+  Comment_ID : integer **PK**
+  AuthorId : integer **FK**
+  Content : text
+  Datetime : timestamp
+  ReplyToTask : integer **FK** (nullable)
+  ReplyToComment : integer **FK** (nullable)
+}
+
+entity "Like" as like {
+  Task_ID : integer **PK**
+  FromUser : integer **FK**
+  ToTask : integer **FK**
+}
+
+user --> task : "Создает/Изменяет/Удаляет"
+user --> comment : "Пишет"
+user --> like : "Ставит"
+
+comment --> task : "Отвечает на"
+comment --> comment : "Отвечает на"
+
+like --> task : "Принадлежит"
+
+@enduml

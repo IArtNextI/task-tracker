@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/user/task-tracker/stat_service";
+
+service StatService {
+    rpc GetViewsAndLikes(GetViewsAndLikesRequest) returns (GetViewsAndLikesResponse) {};
+    rpc GetTop5LikedOrViewedTasks(GetTop5LikedOrViewedTasksRequest) returns (GetTop5LikedOrViewedTasksResponse) {};
+    rpc GetTop3LikedUsers(google.protobuf.Empty) returns (GetTop3LikedUsersResponse) {};
+}
+
+message GetViewsAndLikesRequest {
+    string task_id = 1;
+}
+
+message GetViewsAndLikesResponse {
+    int32 views = 1;
+    int32 likes = 2;
+    string task_id = 3;
+}
+
+message GetTop5LikedOrViewedTasksRequest {
+    bool likes = 1;
+}
+
+message GetTop5LikedOrViewedTasksResponse {
+    message TaskIdAndCount {
+        string task_id = 1;
+        int32 count = 2;
+    }
+    repeated TaskIdAndCount tasks = 1;
+}
+
+message GetTop3LikedUsersResponse {
+    message UserIdAndLikeCount {
+        string user_id = 1;
+        int32 like_count = 2;
+    }
+
+    repeated UserIdAndLikeCount user_ids = 1;
+}

@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  clickhouse:
+    image: yandex/clickhouse-server:latest
+    ports:
+      - 8123:8123
+      - 9000:9000
+    environment:
+      - CLICKHOUSE_DEFAULT_DATABASE=default
+    volumes:
+      - ../../stat-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  stat-service:
+    build:
+      context: ../../stat-service
+      dockerfile: Dockerfile.stat-service
+    ports:
+      - "50051:50051"
+    command: python3 main.py

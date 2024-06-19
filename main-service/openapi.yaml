@@ -1,0 +1,229 @@
+openapi: 3.0.3
+info:
+  title: Main Service OpenApi Spec
+  description: |-
+    This is the specification of Task Manager's Main Service
+  version: 0.0.1
+paths:
+  /register:
+    post:
+      summary: Create a new user by login and password
+      requestBody:
+        description: Create a new user by login and password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+        required: true
+      responses:
+        '200':
+          description: User successfuly created
+        '400':
+          description: Invalid schema of provideded json detected
+        '403':
+          description: User with the login already exists
+        '500':
+          description: Server failed to process the operation
+  /login:
+    post:
+      summary: Authorize with login and password
+      requestBody:
+        description: Authorize with login and password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful authorization
+        '401':
+          description: Failed to authorize
+        '404':
+          description: Unknown login
+        '500':
+          description: Server failed to process the operation
+  /update:
+    post:
+      summary: Authorize with login and password
+      requestBody:
+        description: Authorize with login and password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserData'
+        required: true
+      responses:
+        '200':
+          description: Successfully update data
+        '400':
+          description: Bad request format
+        '403':
+          description: You attempted to modify data you down own
+        '500':
+          description: Server failed to process the operation
+  /tasks/create:
+    post:
+      summary: Create a new task
+      requestBody:
+        description: Create a new task
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully created
+        '500':
+          description: Server failed to process the operation
+  /tasks/update:
+    post:
+      summary: Update an existing task
+      requestBody:
+        description: Update an existing task
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully updated
+        '500':
+          description: Server failed to process the operation
+  /tasks/delete:
+    delete:
+      summary: Delete a task
+      requestBody:
+        description: Delete a task
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteTaskRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully updated
+        '500':
+          description: Server failed to process the operation
+  /tasks/get:
+    get:
+      summary: Get a task
+      requestBody:
+        description: Get a task
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetTaskRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully requested
+        '500':
+          description: Server failed to process the operation
+  /tasks/getlist:
+    get:
+      summary: Get all tasks for a user
+      requestBody:
+        description: Get all tasks for a user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetListRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully requested
+        '500':
+          description: Server failed to process the operation
+
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        login:
+          type: string
+          example: your-login
+        password:
+          type: string
+          example: super-secure-password
+    UserData:
+      type: object
+      properties:
+        login:
+          type: string
+          example: your-login
+        password:
+          type: string
+          example: super-secure-password
+        name:
+          type: string
+          example: Alice
+        lastname:
+          type: string
+          example: Brown
+        birthday:
+          type: string
+          example: 1997-01-30
+        email:
+          type: string
+          example: alice.brown@gmail.com
+        mobilephone:
+          type: string
+          example: +7(123)456-78-90
+    CreateTaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Do the dishes
+        content:
+          type: string
+          example: Do the dishes, dry them and put in a drawer
+        owner_id:
+          type: string
+          example: some-user-id
+    UpdateTaskRequest:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: some-task-id
+        title:
+          type: string
+          example: Do the dishes
+        content:
+          type: string
+          example: Do the dishes, dry them and put in a drawer
+        status:
+          type: string
+          example: status of task
+        owner_id:
+          type: string
+          example: some-user-id
+    DeleteTaskRequest:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: some-task-id
+        owner_id:
+          type: string
+          example: some-user-id
+    GetTaskRequest:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: some-task-id
+        owner_id:
+          type: string
+          example: some-user-id
+    GetListRequest:
+      type: object
+      properties:
+        owner_id:
+          type: string
+          example: some-user-id

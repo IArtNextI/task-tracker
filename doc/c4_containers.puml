@@ -1,0 +1,33 @@
+@startuml Containers
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Архитектура трекера задач
+
+Person(user, "Пользователь")
+
+Container(main_service, "Главный сервис",  "REST API", "отвечает за клиентское API и за регистрацию и аутентификацию пользователей")
+Container(stat_service, "Сервис статистики", "gRPC API", "занимается подсчетом лайков и просмотров")
+Container(task_service, "Сервис задач и комментариев", "gRPC API", "обрабатывает поступающие задачи и комментарии")
+
+ContainerDb(main_service_db, "База данных пользователей")
+ContainerDb(stat_service_db, "База данных статистики", "Clickhouse")
+ContainerDb(task_service_db, "База данных задач и комментариев")
+
+Rel(main_service, main_service_db, "Данные пользователей")
+Rel(stat_service, stat_service_db, "Статистика")
+Rel(task_service, task_service_db, "Задачи и комментарии")
+
+Container(kafka, "Брокер сообщений", "Kafka")
+
+Rel(main_service, kafka, "Просмотры и лайки")
+
+Rel(kafka, stat_service, "Просмотры и лайки")
+
+Rel(main_service, task_service, "Задачи и комментарии", "gRPC")
+
+Rel(user, main_service, "Запросы", "HTTP")
+
+@enduml

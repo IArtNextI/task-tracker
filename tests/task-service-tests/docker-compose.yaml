@@ -1,0 +1,26 @@
+version: '3.3'
+
+services:
+  redis-tasks:
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '512M'
+        reservations:
+          cpus: '0.5'
+          memory: '256M'
+    image: redis:7.2
+    restart: on-failure
+    expose:
+      - 6380
+    volumes:
+      - "./task-data:/data"
+    command: redis-server --appendonly yes --requirepass e64a1e3065c49e781aa2721ce86e2725 --port 6380
+  task-service:
+    build:
+      context: ../../task-service
+      dockerfile: Dockerfile.task-service
+    ports:
+      - "50051:50051"
+    command: python3 main.py

@@ -1,0 +1,58 @@
+name: Tests
+
+on: pull_request
+
+jobs:
+  test-stat-service:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Stat service unittests
+        run: |
+          python3 -m pip install -r stat-service/requirements.txt
+          cd stat-service
+          python3 -m unittest test_main.py
+
+  test-task-service:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Task service unittests
+        run: |
+          python3 -m pip install -r task-service/requirements.txt
+          cd task-service
+          python3 -m unittest test_main.py
+
+  test-main-service:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: ['1.20']
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Main service unittests
+        run: |
+          cd main-service
+          go mod tidy
+          go test

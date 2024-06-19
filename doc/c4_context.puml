@@ -1,0 +1,19 @@
+@startuml Context
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/latest/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Диаграмма контекста
+
+Person(user, "Пользователь")
+
+System(task_manager, "Трекер задач")
+System_Ext(task_service, "Сервис задач и комментов", "обрабатывает поступающие задачи и комментарии")
+System_Ext(stat_service, "Сервис статистики", "занимается подсчетом лайков и просмотров")
+
+Rel(user, task_manager, "Менеджит задачи, ставит лайки, пишет комменты")
+Rel(task_manager, task_service, "Шлет задачи и комменты")
+Rel(task_manager, stat_service, "Шлет статистику")
+
+@enduml
